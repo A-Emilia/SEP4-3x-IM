@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-function ComfortZone() {
+function ComfortZonePage() {
   return (
     <div>
       <h1>Comfort Zone</h1>
@@ -11,4 +11,4 @@ function ComfortZone() {
   )
 }
 
-export default ComfortZone;
+export default ComfortZonePage;

@@ -1,7 +1,7 @@
 import { HashRouter, Routes, Route } from "react-router-dom"
-import Main from "./pages/Main"
-import ComfortZone from "./pages/ComfortZone"
-import ViewData from "./pages/ViewData"
+import Main from "./pages/MainPage"
+import ComfortZone from "./pages/ComfortZonePage"
+import ViewData from "./pages/ViewDataPage"
 
 function App() {
   return (

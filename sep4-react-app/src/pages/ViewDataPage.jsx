@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-function ViewData() {
+function ViewDataPage() {
   return (
     <div>
       <h1>ViewData</h1>
@@ -11,4 +11,4 @@ function ViewData() {
   )
 }
 
-export default ViewData;
+export default ViewDataPage;

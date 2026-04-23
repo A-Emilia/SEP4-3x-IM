@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-function Main() {
+function MainPage() {
   return ( 
     <div>
       <div>
@@ -20,4 +20,4 @@ function Main() {
   )
 }
 
-export default Main;
+export default MainPage;
