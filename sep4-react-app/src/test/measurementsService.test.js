@@ -20,7 +20,7 @@ describe("fetchCurrentMeasurements", () =>
     it("rejects with an error when user input incorrect room id",
     async () => {
   await expect(fetchCurrentMeasurements(1000000))
-    .rejects.toThrow("No measurements for room id: 1000000");
+    .rejects.toThrow("No measurements for room 1000000");
     }
     );
 
