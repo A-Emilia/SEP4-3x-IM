@@ -11,11 +11,18 @@ describe("fetchCurrentMeasurements", () =>
         expect(result.temperature.value).toBe(18);
         expect(result.temperature.unit).toBe("C");
         expect(result.humidity.value).toBe(40);
-         expect(result.humidity.unit).toBe("%");
+        expect(result.humidity.unit).toBe("%");
         expect(result.light.value).toBe(40);
         expect(result.light.unit).toBe("lx");
        }
-    
-    )
+    );
+    // error case - invalid roomId rejects with an Error
+    it("rejects with an error when user input incorrect room id",
+    async () => {
+  await expect(fetchCurrentMeasurements(1000000))
+    .rejects.toThrow("No measurements for room id: 1000000");
+    }
+    );
+
 }
 )
