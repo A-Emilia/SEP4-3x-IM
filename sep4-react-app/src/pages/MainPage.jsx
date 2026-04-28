@@ -20,9 +20,9 @@ function MainPage() {
   }
   return (
     <div>
-      <p>Temperature: {data.temperature.value} {data.temperature.unit}</p>
-      <p>Humidity: {data.humidity.value} {data.humidity.unit}</p>
-      <p>Light: {data.light.value} {data.light.unit}</p>
+      <p>Temperature: {data.temperature.value} °C </p>
+      <p>Humidity: {data.humidity.value} %</p>
+      <p>Light: {data.light.value} lx</p>
     </div>
   );
 }
@@ -54,9 +54,13 @@ function MainPage() {
         </Link>
       </div>
       <div>
-        <Link to="/view-data">
-          <button className="nav-btn">View Data</button>
-        </Link>
+        {selectedRoomId ? (
+          <Link to={`/view-data/${selectedRoomId}`}>
+            <button className="nav-btn">View Data</button>
+          </Link>
+        ) : (
+          <button className="nav-btn" disabled>View Data</button>
+        )}
       </div>
     </div>
   )
