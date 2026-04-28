@@ -49,9 +49,13 @@ function MainPage() {
 
       </div>
       <div>
-        <Link to="/comfort-zone">
-          <button className="nav-btn">Comfort Zone</button>
-        </Link>
+        {selectedRoomId ? (
+          <Link to={`/comfort-zone/${selectedRoomId}`}>
+            <button className="nav-btn">Comfort Zone</button>
+          </Link>
+        ) : (
+          <button className="nav-btn" disabled>Comfort Zone</button>
+        )}
       </div>
       <div>
         {selectedRoomId ? (

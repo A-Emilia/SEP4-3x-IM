@@ -28,7 +28,7 @@ function ViewDataPage() {
     };
 
     fetchMeasurements();
-  }, [roomId]); //run only once
+  }, [roomId]);
 
   if (loading) return <p>Loading measurements...</p>;
   if (error) return <p>Error: {error}</p>;
