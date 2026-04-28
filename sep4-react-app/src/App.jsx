@@ -9,7 +9,7 @@ function App() {
         <Routes>
           <Route path="" element={<MainPage />} />
           <Route path="comfort-zone" element={<ComfortZonePage />} />
-          <Route path="view-data" element={<ViewDataPage />} />
+          <Route path="view-data/:roomId" element={<ViewDataPage />} />
         </Routes>
       </HashRouter>
   )

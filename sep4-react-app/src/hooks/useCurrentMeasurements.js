@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchCurrentMeasurements } from "../services/measurementsService";
+import { measurementsApi } from "../services/measurementsApi";
 export function useCurrentMeasurements(roomId){
 
     const [data,setData] = useState(null);
@@ -17,7 +17,7 @@ export function useCurrentMeasurements(roomId){
             let cancel =false;
             setIsLoading(true);
             setError(null);
-            fetchCurrentMeasurements(roomId).then(
+            measurementsApi.getMeasurements(roomId).then(
                 (result) =>{
                     if(cancel) return;
                     setData(result);
