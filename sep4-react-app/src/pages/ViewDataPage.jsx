@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import MeasurementContainer from "../components/MeasurementContainer";
 import { measurementsApi } from "../services/measurementsApi";
+import { LineChart } from "recharts";
 
 const measurementsType = ["temperature", "humidity", "light"];
 const unitByType = {"temperature": "°C", "humidity": "%", "light": "lx", }
