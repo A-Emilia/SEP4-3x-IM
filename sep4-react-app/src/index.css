@@ -85,3 +85,24 @@ body {
   cursor: not-allowed;
   opacity: 0.5;
 }
+.comfort-zone-scenario {
+  margin: 20px;
+}
+
+.comfort-zone-value-list {
+  display: flex;
+  gap: 20px;
+}
+
+.comfort-zone-value-card {
+  padding: 10px;
+  border: 1px solid black;
+}
+
+.comfort-zone-feedback-buttons {
+  margin-top: 10px;
+}
+
+.comfort-zone-feedback-btn {
+  margin-right: 10px;
+}
