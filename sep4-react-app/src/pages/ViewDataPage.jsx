@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import MeasurementContainer from "../components/MeasurementContainer";
-import { measurementsService } from "../services/measurementsApi";
+import { measurementsApi } from "../services/measurementsApi";
 
+const measurementsType = ["temperature", "humidity", "light"];
+const unitByType = {"temperature": "°C", "humidity": "%", "light": "lx", }
 function ViewDataPage() {
   const [measurements, setMeasurements] = useState(null);
   const [activeType, setActiveType] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const roomId = 1;
+  const { roomId: roomIdParam } = useParams();
+  const roomId = Number(roomIdParam);
 
   //render measures data
   useEffect(() => {
     const fetchMeasurements = async () => {
       try {
-        const data = await measurementsService.getMeasurements(roomId);
+        const data = await measurementsApi.getMeasurements(roomId);
         setMeasurements(data);
       } catch (err) {
         setError(err.message);
@@ -25,7 +28,7 @@ function ViewDataPage() {
     };
 
     fetchMeasurements();
-  }, []); //run only once
+  }, [roomId]); //run only once
 
   if (loading) return <p>Loading measurements...</p>;
   if (error) return <p>Error: {error}</p>;

@@ -1,26 +1,37 @@
+import { measurements } from "../mocks/measurements.mock";
+
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 const API_URL = "/api/measurements";
 
-const mockMeasurements = {
-  Temperature: { value: 22.5, timeStamp: "10:30" },
-  Humidity: { value: 30, timeStamp: "10:30" },
-  Light: { value: 450, timeStamp: "10:30" },
-};
+async function getMeasurementsMock(roomId) {
+  await new Promise((res) => setTimeout(res, 500));
+  const room = measurements[roomId];
+  if (!room) {
+    throw new Error(`No measurements for room ${roomId}`);
+  }
+  return room;
+}
 
-export const measurementsService = {
-  getMeasurements: async (roomId) => {
-    if (USE_MOCK) {
-      console.log("MOCK: getMeasurements");
-      await new Promise((res) => setTimeout(res, 500));
-      return mockMeasurements;
-    }
+function adaptServerMeasurement(roomId, dto) {
+  const timeStamp = dto.TimestampUtc;
+  return {
+    roomId,
+    temperature: { value: dto.Temperature, timeStamp },
+    humidity:    { value: dto.Humidity,    timeStamp },
+    light:       { value: dto.Light,       timeStamp },
+  };
+}
 
-    const response = await fetch(`${API_URL}?roomId=${roomId}`);
+async function getMeasurementsRest(roomId) {
+  const response = await fetch(`${API_URL}?roomId=${roomId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch measurements");
+  }
+  const dto = await response.json();
+  return adaptServerMeasurement(roomId, dto);
+}
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch measurements");
-    }
-
-    return response.json();
-  },
+export const measurementsApi = {
+  getMeasurements: (roomId) =>
+    USE_MOCK ? getMeasurementsMock(roomId) : getMeasurementsRest(roomId),
 };
