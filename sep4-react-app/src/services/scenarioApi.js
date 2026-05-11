@@ -2,12 +2,33 @@ const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 const API_URL = "/api/scenarios";
 
 const mockScenario = {
-  id: "moecked-scenario-1",
+  id: "mocekd-scenario-1",
   roomId: 1,
   date: "2026-04-29",
-  temperature: 22,
-  humidity: 45,
-  light: 300
+  predictionHoursAhead: 6,
+  values: [
+    {
+      type: "temperature",
+      label: "Temperature",
+      currentValue: 22,
+      predictedValue: 23,
+      unit: "°C"
+    },
+    {
+      type: "humidity",
+      label: "Humidity",
+      currentValue: 45,
+      predictedValue: 50,
+      unit: "%"
+    },
+    {
+      type: "light",
+      label: "Light",
+      currentValue: 300,
+      predictedValue: 250,
+      unit: "lx"
+    }
+  ]
 };
 
 export const scenarioService = {
@@ -27,17 +48,31 @@ export const scenarioService = {
     return response.json();
   },
 
-  sendFeedback: async ({ scenarioId, feedback }) => {
+  sendFeedback: async ({ scenarioId, valueType, feedback }) => {
     if (USE_MOCK) {
-      console.log("MOCK: sendFeedback", { scenarioId, feedback });
+      console.log("MOCK: sendFeedback", { scenarioId, valueType, feedback });
       await new Promise((res) => setTimeout(res, 300));
+
+      if (feedback === 0) {
+        const mockedNewPredictedValues = {
+         temperature: 24,
+        humidity: 48,
+          light: 275,
+      };
+
+      return {
+          success: true,
+          newPredictedValue: mockedNewPredictedValues[valueType],
+       };
+      }
+
       return { success: true };
     }
 
     const response = await fetch(`${API_URL}/feedback`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ scenarioId, feedback })
+      body: JSON.stringify({ scenarioId, valueType, feedback })
     });
 
     if (!response.ok) {

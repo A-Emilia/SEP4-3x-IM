@@ -8,8 +8,8 @@ function ComfortZonePage() {
   const [loading, setLoading] = useState(true);
   const [feedbackLoading, setFeedbackLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [feedbackSent, setFeedbackSent] = useState(false);
-  
+  const [feedbackSentFor, setFeedbackSentFor] = useState([]);
+
   const { roomId: roomIdParam } = useParams();
   const roomId = Number(roomIdParam);
 
@@ -30,18 +30,30 @@ function ComfortZonePage() {
   }, [roomId]);
 
   // feedback
-  const handleFeedback = async (type) => {
-    if (feedbackSent) return;
+  const handleFeedback = async (valueType, feedback) => {
+    setFeedbackLoading(true);
 
     try {
-      setFeedbackLoading(true);
-
-      await scenarioService.sendFeedback({
+      const result = await scenarioService.sendFeedback({
         scenarioId: scenario.id,
-        feedback: type
+        valueType,
+        feedback,
       });
 
-      setFeedbackSent(true);
+      if (feedback === 1) {
+        setFeedbackSentFor((previous) => [...previous, valueType]);
+      }
+
+      if (feedback === 0 && result.newPredictedValue !== undefined) {
+        setScenario((previousScenario) => ({
+          ...previousScenario,
+          values: previousScenario.values.map((value) =>
+            value.type === valueType
+              ? { ...value, predictedValue: result.newPredictedValue }
+              : value,
+          ),
+        }));
+      }
     } catch (err) {
       console.error(err);
       alert("Failed to send feedback");
@@ -55,15 +67,16 @@ function ComfortZonePage() {
   if (error) return <p>Error: {error}</p>;
   if (!scenario) return <p>No scenario available</p>;
 
- return (
+  return (
     <div>
       <h1>Comfort Zone</h1>
 
       <Scenario
         scenario={scenario}
-        onLiked={() => handleFeedback(1)}
-        onDisliked={() => handleFeedback(0)}
-        disabled={feedbackSent || feedbackLoading}
+        onLiked={(valueType) => handleFeedback(valueType, 1)}
+        onDisliked={(valueType) => handleFeedback(valueType, 0)}
+        feedbackLoading={feedbackLoading}
+        feedbackSentFor={feedbackSentFor}
       />
 
       <Link to="/main">
