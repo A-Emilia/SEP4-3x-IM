@@ -48,17 +48,31 @@ export const scenarioService = {
     return response.json();
   },
 
-  sendFeedback: async ({ scenarioId, feedback }) => {
+  sendFeedback: async ({ scenarioId, valueType, feedback }) => {
     if (USE_MOCK) {
-      console.log("MOCK: sendFeedback", { scenarioId, feedback });
+      console.log("MOCK: sendFeedback", { scenarioId, valueType, feedback });
       await new Promise((res) => setTimeout(res, 300));
+
+      if (feedback === 0) {
+        const mockedNewPredictedValues = {
+         temperature: 24,
+        humidity: 48,
+          light: 275,
+      };
+
+      return {
+          success: true,
+          newPredictedValue: mockedNewPredictedValues[valueType],
+       };
+      }
+
       return { success: true };
     }
 
     const response = await fetch(`${API_URL}/feedback`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ scenarioId, feedback })
+      body: JSON.stringify({ scenarioId, valueType, feedback })
     });
 
     if (!response.ok) {
