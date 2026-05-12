@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import MeasurementContainer from "../components/MeasurementContainer";
 import { measurementsApi } from "../services/measurementsApi";
-
 import MeasurementChart from "../components/MeasurementChart";
+import DailySummary from "../components/DailySummary";
 
 const measurementsType = ["temperature", "humidity", "light"];
 const unitByType = { temperature: "°C", humidity: "%", light: "lx" };
@@ -48,39 +48,45 @@ function ViewDataPage() {
     <div>
       <h1>ViewData</h1>
 
-      {/*render btn for each msr type, plus an "All" btn to show every measurement*/}
-      <div className="chart-filter">
-        <button onClick={() => setActiveType("All")}>All</button>
-        {measurementsType.map((type) => (
-          <button key={type} onClick={() => setActiveType(type)}>
-            {type}
-          </button>
-        ))}
-      </div>
+      <div className="view-data-layout">
+      <div className="view-data-main">
+        {/*render btn for each msr type, plus an "All" btn to show every measurement*/}
+        <div className="chart-filter">
+          <button onClick={() => setActiveType("All")}>All</button>
+          {measurementsType.map((type) => (
+            <button key={type} onClick={() => setActiveType(type)}>
+              {type}
+            </button>
+          ))}
+        </div>
 
-      {typesToShow.map((type) => (
-        <MeasurementContainer
-          key={type}
-          type={type}
-          value={measurements[type].value}
-          timeStamp={measurements[type].timeStamp}
-        />
-      ))}
-      {typesToShow.map(
-        (type) => (
-          <MeasurementChart 
-          key= {type}
-          type = {type}
-          data = {historyMeasurements}
+        {typesToShow.map((type) => (
+          <MeasurementContainer
+            key={type}
+            type={type}
+            value={measurements[type].value}
+            timeStamp={measurements[type].timeStamp}
           />
-        )
-      )}
+        ))}
 
-      <Link to="/main">
-        <button className="nav-btn">Home</button>
-      </Link>
+        {typesToShow.map((type) => (
+          <MeasurementChart
+            key={type}
+            type={type}
+            data={historyMeasurements}
+          />
+        ))}
+
+        <Link to="/main">
+          <button className="nav-btn">Home</button>
+        </Link>
+      
+      </div>
+        <DailySummary history={historyMeasurements} types={typesToShow} />
+      </div>
     </div>
-  );
+);
+
 }
 
 export default ViewDataPage;
