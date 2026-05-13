@@ -216,3 +216,46 @@ body {
 .auth-link a:hover {
   text-decoration: underline;
 }
+
+.view-data-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 0 20px;
+}
+
+.view-data-main {
+  flex: 1;
+}
+
+.daily-summary {
+  border: 1px solid black;
+  padding: 12px;
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.daily-summary h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.daily-summary-row {
+  margin-bottom: 12px;
+}
+
+.daily-summary-row h3 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  text-transform: capitalize;
+}
+
+.daily-summary-row p {
+  margin: 2px 0;
+  font-size: 14px;
+}
+
+.measurement-container h3,
+.chart-filter button {
+  text-transform: capitalize;
+}
