@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
-const API_URL = "https://localhost:7026";
+const API_URL = import.meta.env.VITE_API_BASE_URL
 
 // mocking
 async function mockRegister(userData) {
@@ -31,7 +31,7 @@ async function mockLogin(loginData) {
 
 // real implementation
 async function apiRegister(userData) {
-    const res = await fetch(`${API_URL}/api/auth/register`, {
+    const res = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -46,7 +46,7 @@ async function apiRegister(userData) {
 }
 
 async function apiLogin(loginData) {
-    const res = await fetch(`${API_URL}/api/auth/login`, {
+    const res = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
@@ -57,7 +57,13 @@ async function apiLogin(loginData) {
         throw new Error(err);
     }
 
-    return await res.json();
+    const data = await res.json();
+
+    // debugging logs
+    console.log("LOGIN DATA:", data);
+    console.log("TOKEN:", data.token);
+
+    return data;
 }
 
 

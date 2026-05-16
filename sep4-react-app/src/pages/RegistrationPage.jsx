@@ -3,25 +3,30 @@ import { registerUser } from "../services/authService";
 import { Link, useNavigate } from "react-router-dom";
 
 function RegistrationPage() {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsSubmitting(true);
+    setMessage("");
+
     try {
       const response = await registerUser({
-        username,
+        name,
         email,
         password,
       });
 
       if (!response.success) {
-        setMessage("Registration failed");
+        setMessage("Registration failed: " + response.message);
+        setIsSubmitting(false);
         return;
       }
 
@@ -32,7 +37,8 @@ function RegistrationPage() {
       }, 800);
 
     } catch (error) {
-      setMessage("Registration failed");
+      setMessage("Registration failed: " + error.message);
+      setIsSubmitting(false);
     }
   };
 
@@ -47,8 +53,8 @@ function RegistrationPage() {
             <input
               className="auth-form-input"
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
 
@@ -72,7 +78,7 @@ function RegistrationPage() {
             />
           </div>
 
-          <button type="submit" className="auth-button">
+          <button type="submit" className="auth-button" disabled={isSubmitting || !name || !email || !password}>
             Register
           </button>
         </form>
