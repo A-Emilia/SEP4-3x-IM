@@ -11,13 +11,15 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "jsonwebtoken": "^9.0.3",
+    "jwt-decode": "^4.0.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.2",
     "recharts": "^2.15.0"
   },
   "devDependencies": {
-   "@eslint/js": "^9.39.4",
+    "@eslint/js": "^9.39.4",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
