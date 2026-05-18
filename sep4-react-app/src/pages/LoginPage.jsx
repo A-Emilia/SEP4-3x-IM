@@ -23,7 +23,7 @@ function LoginPage() {
       }, 800);
 
     } catch (error) {
-      setMessage("Login failed");
+      setMessage("Login failed: " + error.message);
     }
   };
 

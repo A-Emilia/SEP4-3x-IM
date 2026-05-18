@@ -1,5 +1,7 @@
+import { jwtDecode } from "jwt-decode";
+
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
-const API_URL = "http://localhost:8080";
+const API_URL = import.meta.env.VITE_API_BASE_URL
 
 // mocking
 async function mockRegister(userData) {
@@ -29,27 +31,39 @@ async function mockLogin(loginData) {
 
 // real implementation
 async function apiRegister(userData) {
-    const res = await fetch(`${API_URL}/register`, {
+    const res = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
     });
 
-    if (!res.ok) throw new Error("Registration failed");
+    if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err);
+    }
 
     return await res.json();
 }
 
 async function apiLogin(loginData) {
-    const res = await fetch(`${API_URL}/login`, {
+    const res = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
     });
 
-    if (!res.ok) throw new Error("Login failed");
+    if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err);
+    }
 
-    return await res.json();
+    const data = await res.json();
+
+    // debugging logs
+    console.log("LOGIN DATA:", data);
+    console.log("TOKEN:", data.token);
+
+    return data;
 }
 
 
@@ -84,4 +98,14 @@ export async function registerUser(userData) {
 
 export async function loginUser(loginData) {
     return USE_MOCK ? mockLogin(loginData) : apiLogin(loginData);
+}
+
+// jwt
+
+export function decodeToken(token) {
+    try {
+        return jwtDecode(token);
+    } catch {
+        return null;
+    }
 }

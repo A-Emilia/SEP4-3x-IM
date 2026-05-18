@@ -6,6 +6,7 @@ import {
     clearAuth,
     getToken,
     getUser,
+    decodeToken,
 } from "../services/authService";
 
 const AuthContext = createContext();
@@ -17,16 +18,27 @@ export function AuthProvider({ children }) {
 
     // init
     useEffect(() => {
-        const storedToken = getToken();
-        const storedUser = getUser();
+    const storedToken = getToken();
+    const storedUser = getUser();
 
-        if (storedToken && storedUser) {
-            setToken(storedToken);
-            setUser(storedUser);
+    if (storedToken) {
+        const decoded = decodeToken(storedToken);
+
+        // token expired?
+        if (decoded?.exp * 1000 < Date.now()) {
+            clearAuth();
+            setLoading(false);
+            return;
         }
 
-        setLoading(false);
-    }, []);
+        setToken(storedToken);
+
+        // prefer backend user, fallback decoded
+        setUser(storedUser || decoded);
+    }
+
+    setLoading(false);
+}, []);
 
     // login
     const login = async (credentials) => {
