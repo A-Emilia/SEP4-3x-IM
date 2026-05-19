@@ -4,23 +4,24 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import ViewDataPage from "../pages/ViewDataPage";
 
-const now = new Date().toISOString();
-const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-
-vi.mock("../api/measurementsApi", () => ({
-  measurementsApi: {
-    getMeasurements: vi.fn().mockResolvedValue({
-      roomId: 1,
-      temperature: { value: 21, timeStamp: now },
-      humidity: { value: 45, timeStamp: now },
-      light: { value: 300, timeStamp: now },
-    }),
-    getMeasurementsHistory: vi.fn().mockResolvedValue([
-      { timeStamp: oneHourAgo, temperature: 20, humidity: 44, light: 280 },
-      { timeStamp: now, temperature: 21, humidity: 45, light: 300 },
-    ]),
-  },
-}));
+vi.mock("../api/measurementsApi", () => {
+  const now = new Date().toISOString();
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  return {
+    measurementsApi: {
+      getMeasurements: vi.fn().mockResolvedValue({
+        roomId: 1,
+        temperature: { value: 21, timeStamp: now },
+        humidity: { value: 45, timeStamp: now },
+        light: { value: 300, timeStamp: now },
+      }),
+      getMeasurementsHistory: vi.fn().mockResolvedValue([
+        { timeStamp: oneHourAgo, temperature: 20, humidity: 44, light: 280 },
+        { timeStamp: now, temperature: 21, humidity: 45, light: 300 },
+      ]),
+    },
+  };
+});
 
 const renderPage = () =>
   render(

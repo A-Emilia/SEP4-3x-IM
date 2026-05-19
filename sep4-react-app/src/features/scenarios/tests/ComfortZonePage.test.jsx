@@ -45,7 +45,9 @@ describe("ComfortZonePage", () => {
       expect(screen.queryByText(/loading scenario/i)).not.toBeInTheDocument(),
     );
 
-    expect(screen.getByRole("heading", { name: "Temperature" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Temperature", level: 4 }),
+    ).toBeInTheDocument();
     expect(screen.getByText(/Current: 22°C/)).toBeInTheDocument();
     expect(screen.getByText(/Predicted: 23°C/)).toBeInTheDocument();
     expect(screen.getByText(/Current: 45%/)).toBeInTheDocument();
